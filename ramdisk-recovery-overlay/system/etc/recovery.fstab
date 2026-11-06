@@ -1,0 +1,21 @@
+# ==============================================================================
+# Recovery fstab for Lenovo Tab M8 HD (TB-8505X / akita_row_call)
+# Verified from physical GPT and Little Kernel fastboot partition table
+# ==============================================================================
+# <src>                                          <mnt_point> <type>  <mnt_flags and options>  <fs_mgr_flags>
+
+# Core boot and kernel partitions (Raw eMMC)
+/dev/block/by-name/boot                          /boot       emmc    defaults                 defaults
+/dev/block/by-name/recovery                      /recovery   emmc    defaults                 defaults
+/dev/block/by-name/dtbo                          /dtbo       emmc    defaults                 defaults
+/dev/block/by-name/vbmeta                        /vbmeta     emmc    defaults                 defaults
+
+# Android OS and Halium Container Partitions (ext4)
+/dev/block/by-name/system                        /system     ext4    ro                       wait
+/dev/block/by-name/vendor                        /vendor     ext4    ro                       wait
+/dev/block/by-name/userdata                      /data       ext4    noatime,nosuid,nodev     wait,check
+/dev/block/by-name/cache                         /cache      ext4    noatime,nosuid,nodev     wait,check
+/dev/block/by-name/persist                       /persist    ext4    noatime,nosuid,nodev     wait,check
+
+# Parameter and Misc partitions
+/dev/block/by-name/para                          /misc       emmc    defaults                 defaults

@@ -1,0 +1,109 @@
+# ==============================================================================
+# Lenovo TB-8505X Ubuntu Touch Porting Project - .gitignore
+# Strictly excludes private calibration data, credentials, firmware images,
+# heavy binaries, and local build artifacts.
+# ==============================================================================
+
+# Private & Device-Specific Data (NEVER COMMIT)
+private/
+backups/
+*.nvram
+*.nvdata
+*.nvcfg
+*.proinfo
+*.protect1
+*.protect2
+*.seccfg
+*.persist
+*.img.bak
+*.raw.bak
+*.bin.bak
+*.tar.gz.bak
+*.serial
+*.imei
+
+# Firmware Images & Large Archives
+firmware/
+*.img
+*.iso
+*.bin
+*.svc
+*.scatter
+*.txt.scatter
+*.zip
+*.xz
+*.gz
+*.tar
+*.tgz
+*.bz2
+*.7z
+
+# Kernel & Android Build Artifacts
+build/
+work/
+workdir/
+out/
+dist/
+*.o
+*.ko
+*.so
+*.a
+*.dtb
+*.dtbo
+*.zImage
+*.Image
+*.Image.gz
+*.Image.gz-dtb
+*.modules
+modules.builtin*
+modules.order
+.config
+.config.old
+*.cmd
+*.tmp
+
+# Halium / Prebuilt Toolchains & Clones
+toolchains/
+clang/
+gcc/
+prebuilts/
+tools/mtkclient/
+halium-boot-ramdisk.img
+initrd.img*
+rootfs/
+rootfs.tar*
+
+# Logs & Diagnostics (keep documentation, ignore local run logs)
+logs/*.log
+logs/*local*
+logs/build/
+!logs/README.md
+!logs/.gitkeep
+
+# Security, Certificates & Keys
+*.key
+*.pk8
+*.pem
+*.x509.*
+*.cer
+*.crt
+.env
+.env.*
+*.secret
+
+# Python & System Noise
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+venv/
+ENV/
+
+# Editor & OS Artifacts
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*~
+.vscode/
+.idea/

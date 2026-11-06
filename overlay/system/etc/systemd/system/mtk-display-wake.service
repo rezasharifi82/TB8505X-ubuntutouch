@@ -1,0 +1,19 @@
+[Unit]
+Description=MediaTek Display Sleep/Wake Hardware Synchronizer (TB-8505X)
+Documentation=file:/usr/local/bin/mtk-display-wake.py
+After=dbus.service repowerd.service lomiri-system-compositor.service
+Wants=repowerd.service
+ConditionPathExists=/sys/class/graphics/fb0
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/python3 /usr/local/bin/mtk-display-wake.py
+Restart=always
+RestartSec=3
+Nice=-5
+
+# Never let a stuck sysfs write wedge the unit.
+TimeoutStopSec=10
+
+[Install]
+WantedBy=multi-user.target

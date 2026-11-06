@@ -1,0 +1,89 @@
+# ==============================================================================
+# udev rules for Lenovo Tab M8 HD LTE (TB-8505X / akita_row_call)
+# Platform: MediaTek MT6761 / MT8766B
+# Cleaned of extraneous Qualcomm rules; implements least-privilege access
+# ==============================================================================
+
+# Core Virtual and Terminal Devices
+ACTION=="add", KERNEL=="null", OWNER="root", GROUP="root", MODE="0666"
+ACTION=="add", KERNEL=="zero", OWNER="root", GROUP="root", MODE="0666"
+ACTION=="add", KERNEL=="full", OWNER="root", GROUP="root", MODE="0666"
+ACTION=="add", KERNEL=="ptmx", OWNER="root", GROUP="root", MODE="0666"
+ACTION=="add", KERNEL=="tty", OWNER="root", GROUP="root", MODE="0666"
+ACTION=="add", KERNEL=="random", OWNER="root", GROUP="root", MODE="0666"
+ACTION=="add", KERNEL=="urandom", OWNER="root", GROUP="root", MODE="0666"
+ACTION=="add", KERNEL=="hw_random", OWNER="root", GROUP="system", MODE="0440"
+ACTION=="add", KERNEL=="ashmem", OWNER="root", GROUP="root", MODE="0666"
+
+# Android Binder IPC Devices
+ACTION=="add", KERNEL=="binder", OWNER="root", GROUP="root", MODE="0666"
+ACTION=="add", KERNEL=="hwbinder", OWNER="root", GROUP="root", MODE="0666"
+ACTION=="add", KERNEL=="vndbinder", OWNER="root", GROUP="root", MODE="0666"
+ACTION=="add", KERNEL=="anbox-binder", OWNER="root", GROUP="root", MODE="0666"
+ACTION=="add", KERNEL=="anbox-hwbinder", OWNER="root", GROUP="root", MODE="0666"
+ACTION=="add", KERNEL=="anbox-vndbinder", OWNER="root", GROUP="root", MODE="0666"
+
+# PowerVR Rogue GE8300 Graphics Acceleration
+ACTION=="add", KERNEL=="pvrsrvkm", OWNER="root", GROUP="video", MODE="0666"
+ACTION=="add", KERNEL=="pvr_sync", OWNER="root", GROUP="video", MODE="0666"
+ACTION=="add", KERNEL=="dri/*", OWNER="root", GROUP="video", MODE="0660"
+ACTION=="add", KERNEL=="graphics/*", OWNER="root", GROUP="video", MODE="0660"
+ACTION=="add", KERNEL=="ion", OWNER="root", GROUP="video", MODE="0666"
+ACTION=="add", KERNEL=="sw_sync", OWNER="root", GROUP="video", MODE="0660"
+
+# MediaTek Display Management (LCM / DSI / CMDQ)
+ACTION=="add", KERNEL=="mtk_disp_mgr", OWNER="root", GROUP="video", MODE="0660"
+ACTION=="add", KERNEL=="mtkfb_vsync", OWNER="root", GROUP="video", MODE="0660"
+ACTION=="add", KERNEL=="mtk_cmdq", OWNER="root", GROUP="system", MODE="0644"
+ACTION=="add", KERNEL=="mdp_sync", OWNER="root", GROUP="video", MODE="0660"
+ACTION=="add", KERNEL=="M4U_device", OWNER="system", GROUP="video", MODE="0660"
+ACTION=="add", KERNEL=="mt-mdp", OWNER="system", GROUP="video", MODE="0660"
+ACTION=="add", KERNEL=="mtk_dfrc", OWNER="system", GROUP="video", MODE="0660"
+
+# Input Devices (Focaltech FT8201 Touchscreen & Hardware Keys)
+ACTION=="add", KERNEL=="input/*", OWNER="root", GROUP="input", MODE="0660"
+ACTION=="add", KERNEL=="touch", OWNER="root", GROUP="input", MODE="0660"
+ACTION=="add", KERNEL=="uinput", OWNER="root", GROUP="input", MODE="0660"
+ACTION=="add", KERNEL=="uhid", OWNER="root", GROUP="input", MODE="0660"
+
+# MediaTek MT6357 Audio & CCCI Modem Audio Streams
+ACTION=="add", KERNEL=="snd/*", OWNER="root", GROUP="audio", MODE="0660"
+ACTION=="add", KERNEL=="audio_ipi", OWNER="system", GROUP="audio", MODE="0640"
+ACTION=="add", KERNEL=="offloadservice", OWNER="media", GROUP="audio", MODE="0640"
+ACTION=="add", KERNEL=="vow", OWNER="system", GROUP="audio", MODE="0640"
+ACTION=="add", KERNEL=="ccci_pcm_rx", OWNER="audio", GROUP="audio", MODE="0660"
+ACTION=="add", KERNEL=="ccci_pcm_tx", OWNER="audio", GROUP="audio", MODE="0660"
+ACTION=="add", KERNEL=="ccci_aud", OWNER="audio", GROUP="audio", MODE="0660"
+ACTION=="add", KERNEL=="ccci_raw_audio", OWNER="audio", GROUP="audio", MODE="0660"
+
+# MediaTek Connectivity (MT6631 Wi-Fi, Bluetooth, GPS, FM)
+ACTION=="add", KERNEL=="stpwmt", OWNER="system", GROUP="system", MODE="0660"
+ACTION=="add", KERNEL=="wmtdetect", OWNER="system", GROUP="system", MODE="0660"
+ACTION=="add", KERNEL=="stpbt", OWNER="bluetooth", GROUP="netdev", MODE="0660"
+ACTION=="add", KERNEL=="wmtWifi", OWNER="wifi", GROUP="netdev", MODE="0660"
+ACTION=="add", KERNEL=="stpgps", OWNER="gps", GROUP="dialout", MODE="0660"
+ACTION=="add", KERNEL=="gps", OWNER="gps", GROUP="dialout", MODE="0660"
+ACTION=="add", KERNEL=="fm", OWNER="system", GROUP="audio", MODE="0660"
+
+# MediaTek Cellular Modem (CCCI & RIL Channels)
+ACTION=="add", KERNEL=="ccci*", OWNER="radio", GROUP="dialout", MODE="0660"
+ACTION=="add", KERNEL=="ttyC*", OWNER="radio", GROUP="dialout", MODE="0660"
+ACTION=="add", KERNEL=="eemcs*", OWNER="radio", GROUP="dialout", MODE="0660"
+ACTION=="add", KERNEL=="emd*", OWNER="radio", GROUP="dialout", MODE="0660"
+ACTION=="add", KERNEL=="ttyACM0", OWNER="radio", GROUP="dialout", MODE="0660"
+ACTION=="add", KERNEL=="ttyRB*", OWNER="radio", GROUP="dialout", MODE="0660"
+
+# Camera & Video Codec (VPU / MJC)
+ACTION=="add", KERNEL=="Vcodec", OWNER="system", GROUP="video", MODE="0660"
+ACTION=="add", KERNEL=="MJC", OWNER="system", GROUP="video", MODE="0660"
+ACTION=="add", KERNEL=="ccu", OWNER="system", GROUP="video", MODE="0660"
+ACTION=="add", KERNEL=="mtk_jpeg", OWNER="system", GROUP="video", MODE="0660"
+
+# Subsystem Microcontrollers (SCP / SSPM / SPM)
+ACTION=="add", KERNEL=="scp", OWNER="root", GROUP="system", MODE="0440"
+ACTION=="add", KERNEL=="sspm", OWNER="root", GROUP="system", MODE="0440"
+ACTION=="add", KERNEL=="MTK_SMI", OWNER="system", GROUP="video", MODE="0660"
+
+# USB Gadget & MTP
+ACTION=="add", KERNEL=="mtp_usb", OWNER="root", GROUP="plugdev", MODE="0660"
+ACTION=="add", KERNEL=="usb_accessory", OWNER="root", GROUP="plugdev", MODE="0660"

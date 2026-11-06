@@ -1,0 +1,3 @@
+# PulseAudio configuration for Lenovo Tab M8 HD (TB-8505X / akita_row_call)
+# MediaTek MT6761 / MT6357 Audio HAL via libhybris
+load-module module-droid-card rate=48000 quirks=+no_hw_volume voice_virtual_stream=true

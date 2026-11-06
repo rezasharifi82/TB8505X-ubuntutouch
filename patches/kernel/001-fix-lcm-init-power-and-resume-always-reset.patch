@@ -1,0 +1,43 @@
+diff --git a/drivers/misc/mediatek/lcm/ft8201_wxga_vdo_incell_boe/ft8201_wxga_vdo_incell_boe.c b/drivers/misc/mediatek/lcm/ft8201_wxga_vdo_incell_boe/ft8201_wxga_vdo_incell_boe.c
+index 27e331029..6f4f04d74 100644
+--- a/drivers/misc/mediatek/lcm/ft8201_wxga_vdo_incell_boe/ft8201_wxga_vdo_incell_boe.c
++++ b/drivers/misc/mediatek/lcm/ft8201_wxga_vdo_incell_boe/ft8201_wxga_vdo_incell_boe.c
+@@ -296,8 +296,20 @@ static void lcm_init_power(void)
+ 	//if(!tp_gesture_mode) {
+ 		pr_debug("[LCM][GPIO]lcm_init_power !\n");
+ 		lcm_power_enable();
++		// Perform full reset sequence to ensure LCD is properly initialized
++		pr_debug("[LCM][GPIO]lcm_init_power full reset sequence !\n");
++		MDELAY(7);
++		ctp_reset_pin(0);
++		MDELAY(5);
++		lcm_reset_pin(0);
++		MDELAY(5);
++		MDELAY(5);
++		ctp_reset_pin(1);
++		MDELAY(5);
++		lcm_reset_pin(1);
++		MDELAY(35);
+ 	//}
+-}
++	}
+ 
+ static void lcm_suspend_power(void)
+ {
+diff --git a/drivers/misc/mediatek/video/mt6765/videox/primary_display.c b/drivers/misc/mediatek/video/mt6765/videox/primary_display.c
+index af9947459..56996e7e7 100644
+--- a/drivers/misc/mediatek/video/mt6765/videox/primary_display.c
++++ b/drivers/misc/mediatek/video/mt6765/videox/primary_display.c
+@@ -4773,10 +4773,8 @@ int primary_display_resume(void)
+ 		MMPROFILE_FLAG_START, 0, 0);
+ 
+ 	_primary_path_lock(__func__);
+-	if (pgc->state == DISP_ALIVE) {
+-		DISPCHECK("primary display path is already resume, skip\n");
+-		goto done;
+-	}
++	/* SKIP-WHEN-ALIVE CHECK REMOVED: always invoke disp_lcm_resume()
++	 * so the LCM reset + bias sequence runs on every resume/wake. */
+ 	mmprofile_log_ex(ddp_mmp_get_events()->primary_resume,
+ 		MMPROFILE_FLAG_PULSE, 0, 1);
+ 

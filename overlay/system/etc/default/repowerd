@@ -1,0 +1,17 @@
+# repowerd configuration for TB-8505X (Ubuntu Touch 24.04)
+#
+# REPOWERD_MOCKSUSPEND=1 makes repowerd fake the suspend handshake instead of
+# using logind.  On this device that left the display state machine and the
+# kernel display path disagreeing about whether the panel was suspended, so
+# the wake path never re-initialised the FT8201 over DSI.
+# Verified on-device: with this commented out repowerd uses
+# LogindSystemPowerControl and transitions cleanly without deadlocking.
+#REPOWERD_MOCKSUSPEND=1
+
+# Keep repowerd driving the brightness node directly; the wake daemon only
+# restores a sane level when it is left at 0.
+REPOWERD_USE_UPOWER=1
+
+# Do not let repowerd blank immediately on boot while the compositor is still
+# bringing up the panel.
+REPOWERD_DISPLAY_BLANK_DELAY=10

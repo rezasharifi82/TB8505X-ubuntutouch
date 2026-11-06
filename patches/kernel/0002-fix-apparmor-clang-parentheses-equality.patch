@@ -1,0 +1,29 @@
+From f82390a12b48cd90e82103847291048293719823 Mon Sep 17 00:00:00 2001
+From: Ubuntu Touch Port Maintainer <mreza@localhost>
+Date: Thu, 5 Nov 2026 15:10:00 +0330
+Subject: [PATCH 2/2] apparmor: fix clang -Wparentheses-equality error in domain.c
+
+When compiling Linux 4.9 AppArmor with Google Clang (r353983c), extraneous
+parentheses around equality comparison produce -Werror,-Wparentheses-equality.
+Remove the redundant outer parentheses.
+
+Signed-off-by: Autonomous Platform Engineer <porting@localhost>
+---
+ security/apparmor/domain.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/security/apparmor/domain.c b/security/apparmor/domain.c
+index a4d90aa10..9172128ad 100644
+--- a/security/apparmor/domain.c
++++ b/security/apparmor/domain.c
+@@ -107,7 +107,7 @@ static struct file_perms change_profile_perms(struct aa_profile *profile,
+ 		return perms;
+ 	} else if (!profile->file.dfa) {
+ 		return nullperms;
+-	} else if ((ns == profile->ns)) {
++	} else if (ns == profile->ns) {
+ 		/* try matching against rules with out namespace prepended */
+ 		aa_str_perms(profile->file.dfa, start, name, &cond, &perms);
+ 		if (COMBINED_PERM_MASK(perms) & request)
+-- 
+2.43.0

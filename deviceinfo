@@ -1,0 +1,51 @@
+# ==============================================================================
+# Device Information for Lenovo Tab M8 HD (TB-8505X)
+# Standard UBports & Halium Generic Adaptation Specification
+# ==============================================================================
+
+deviceinfo_format_version="1"
+deviceinfo_name="Lenovo Tab M8 HD"
+deviceinfo_manufacturer="Lenovo"
+deviceinfo_codename="akita_row_call"
+deviceinfo_arch="aarch64"
+deviceinfo_kernel_arch="aarch64"
+deviceinfo_halium_version="10"
+
+# Kernel Specification
+deviceinfo_kernel_source="https://github.com/who53/kernel-lenovo-akita.git"
+deviceinfo_kernel_source_branch="main"
+deviceinfo_kernel_defconfig="akita_row_call_defconfig"
+deviceinfo_kernel_cmdline="bootopt=64S3,32N2,64N2 buildvariant=user systempart=/dev/disk/by-partlabel/system"
+deviceinfo_kernel_clang_compile="true"
+deviceinfo_kernel_clang_branch="android10-gsi"
+deviceinfo_kernel_clang_revision="r353983c"
+deviceinfo_kernel_disable_modules="true"
+deviceinfo_dtb="mediatek/mt6761.dtb"
+
+# Boot Image Offsets (MediaTek MT6761 / Header v2 Verified from stock boot.img)
+deviceinfo_flash_pagesize="2048"
+deviceinfo_flash_offset_base="0x40000000"
+deviceinfo_flash_offset_kernel="0x00080000"
+deviceinfo_flash_offset_ramdisk="0x11b00000"
+deviceinfo_flash_offset_second="0x00f00000"
+deviceinfo_flash_offset_tags="0x07880000"
+deviceinfo_flash_offset_dtb="0x07880000"
+
+deviceinfo_bootimg_qcdt="false"
+deviceinfo_bootimg_header_version="2"
+deviceinfo_bootimg_os_version="10"
+deviceinfo_bootimg_os_patch_level="2023-08"
+deviceinfo_bootimg_partition_size="33554432"
+
+# Ramdisk Source for Discrete Partitions (Non-Dynparts)
+deviceinfo_prebuilt_boot_ramdisk_source="https://github.com/halium/initramfs-tools-halium/releases/download/continuous/initrd.img-touch-arm64"
+deviceinfo_ramdisk_compression="gzip"
+
+# Partition & Recovery Details (Non-A/B, Discrete Partitions)
+deviceinfo_has_recovery_partition="true"
+deviceinfo_use_unified_recovery="true"
+deviceinfo_recovery_partition_size="33554432"
+deviceinfo_rootfs_image_sector_size="2048"
+deviceinfo_system_partition_size="3800M"
+deviceinfo_use_overlaystore="true"
+deviceinfo_ubuntu_touch_release="24.04-2.x"

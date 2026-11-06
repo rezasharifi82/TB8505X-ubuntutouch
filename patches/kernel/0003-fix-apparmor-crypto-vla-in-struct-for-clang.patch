@@ -1,0 +1,58 @@
+From 38198fba01948123984029148092184029480192 Mon Sep 17 00:00:00 2001
+From: Ubuntu Touch Port Maintainer <mreza@localhost>
+Date: Thu, 5 Nov 2026 15:18:00 +0330
+Subject: [PATCH 3/3] apparmor: replace VLAIS with SHASH_DESC_ON_STACK for clang compatibility
+
+Clang does not support variable-length arrays inside structures (VLAIS).
+Use the crypto subsystem macro SHASH_DESC_ON_STACK to allocate the hash
+descriptor on the stack cleanly.
+
+Signed-off-by: Autonomous Platform Engineer <porting@localhost>
+---
+ security/apparmor/crypto.c | 17 +++++++----------
+ 1 file changed, 7 insertions(+), 10 deletions(-)
+
+diff --git a/security/apparmor/crypto.c b/security/apparmor/crypto.c
+index b75dab0df..4c2ee4940 100644
+--- a/security/apparmor/crypto.c
++++ b/security/apparmor/crypto.c
+@@ -32,10 +32,7 @@ unsigned int aa_hash_size(void)
+ int aa_calc_profile_hash(struct aa_profile *profile, u32 version, void *start,
+ 			 size_t len)
+ {
+-	struct {
+-		struct shash_desc shash;
+-		char ctx[crypto_shash_descsize(apparmor_tfm)];
+-	} desc;
++	SHASH_DESC_ON_STACK(desc, apparmor_tfm);
+ 	int error = -ENOMEM;
+ 	u32 le32_version = cpu_to_le32(version);
+ 
+@@ -49,19 +46,19 @@ int aa_calc_profile_hash(struct aa_profile *profile, u32 version, void *start,
+ 	if (!profile->hash)
+ 		goto fail;
+ 
+-	desc.shash.tfm = apparmor_tfm;
+-	desc.shash.flags = 0;
++	desc->tfm = apparmor_tfm;
++	desc->flags = 0;
+ 
+-	error = crypto_shash_init(&desc.shash);
++	error = crypto_shash_init(desc);
+ 	if (error)
+ 		goto fail;
+-	error = crypto_shash_update(&desc.shash, (u8 *) &le32_version, 4);
++	error = crypto_shash_update(desc, (u8 *) &le32_version, 4);
+ 	if (error)
+ 		goto fail;
+-	error = crypto_shash_update(&desc.shash, (u8 *) start, len);
++	error = crypto_shash_update(desc, (u8 *) start, len);
+ 	if (error)
+ 		goto fail;
+-	error = crypto_shash_final(&desc.shash, profile->hash);
++	error = crypto_shash_final(desc, profile->hash);
+ 	if (error)
+ 		goto fail;
+ 
+-- 
+2.43.0
