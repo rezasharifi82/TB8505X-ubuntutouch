@@ -10,6 +10,15 @@ An open-source, device-specific port of **Ubuntu Touch (Lomiri)** for the **Leno
 
 Unlike generic GSIs, this project maintains the exact device tree, kernel configurations, hardware adaptation overlay, build scripts, and disaster recovery infrastructure required for a stable native Ubuntu Touch ROM.
 
+> **2026-11-12 status — LineageOS 18.1 GSI is installed and verified.**
+> The tablet currently runs LineageOS 18.1 (Android 11, `arm64_bvS`) with the
+> stock Android 10 vendor, a stock boot whose fstab was patched for GSI/AVB,
+> and root adbd via `phh-su`.
+> All LineageOS images, flash scripts, root/communication tools, docs and
+> verification screenshots now live in the companion repository:
+> **[TB8505X-lineage-os](https://github.com/rezasharifi82/TB8505X-lineage-os)**.
+> The Ubuntu Touch material below is retained as the porting record.
+
 ---
 
 ## Hardware Specifications

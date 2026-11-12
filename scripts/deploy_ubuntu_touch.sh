@@ -176,6 +176,48 @@ adb shell "rm -rf /cache/partitions"
 # 5.4 Align LXC Android Container Image Name
 adb shell "if [ -e $SYSTEM_MOUNT/var/lib/lxc/android/system.img ]; then mv -f $SYSTEM_MOUNT/var/lib/lxc/android/system.img $SYSTEM_MOUNT/var/lib/lxc/android/android-rootfs.img; fi"
 
+# 5.5 Inject Display Wake & Headless Access Drop-ins
+echo ""
+echo "[*] Injecting display wake on boot service..."
+adb shell "cat << 'EOF' > $SYSTEM_MOUNT/etc/systemd/system/display-wake-on-boot.service
+[Unit]
+Description=Early Display Wake for MTK FB
+After=graphical.target
+
+[Service]
+Type=oneshot
+ExecStart=/bin/sh -c 'sleep 3; echo 4 > /sys/class/graphics/fb0/blank; sleep 1; echo 0 > /sys/class/graphics/fb0/blank; echo 150 > /sys/class/leds/lcd-backlight/brightness; echo esd_recovery > /sys/kernel/debug/mtkfb 2>/dev/null || true'
+RemainAfterExit=yes
+
+[Install]
+WantedBy=graphical.target
+EOF"
+
+adb shell "mkdir -p $SYSTEM_MOUNT/etc/systemd/system/multi-user.target.wants"
+adb shell "ln -sf /etc/systemd/system/display-wake-on-boot.service $SYSTEM_MOUNT/etc/systemd/system/multi-user.target.wants/display-wake-on-boot.service"
+adb shell "ln -sf /lib/systemd/system/adbd.service $SYSTEM_MOUNT/etc/systemd/system/multi-user.target.wants/adbd.service"
+
+echo "[*] Configuring usb-moded to default to mtp_adb..."
+adb shell "mkdir -p $SYSTEM_MOUNT/etc/usb-moded"
+adb shell "echo -e '[usbmode]\nmode=mtp_adb\n' > $SYSTEM_MOUNT/etc/usb-moded/90-device-specific-config.ini"
+adb shell "if [ -f $SYSTEM_MOUNT/etc/usb-moded/10-ubports-defaults.ini ]; then sed -i 's/mode=mtp/mode=mtp_adb/g' $SYSTEM_MOUNT/etc/usb-moded/10-ubports-defaults.ini; fi"
+
+echo "[*] Permitting PAM adbd session..."
+adb shell "cat << 'EOF' > $SYSTEM_MOUNT/etc/pam.d/adbd-pam-session
+#%PAM-1.0
+auth sufficient pam_permit.so
+account sufficient pam_permit.so
+session sufficient pam_permit.so
+EOF"
+
+echo "[*] Configuring root SSH access..."
+adb shell "mkdir -p $SYSTEM_MOUNT/root/.ssh && chmod 700 $SYSTEM_MOUNT/root/.ssh"
+if [ -f "$OTA_DIR/ssh_debug_key.pub" ]; then
+    cat "$OTA_DIR/ssh_debug_key.pub" | adb shell "cat > $SYSTEM_MOUNT/root/.ssh/authorized_keys"
+    adb shell "chmod 600 $SYSTEM_MOUNT/root/.ssh/authorized_keys"
+fi
+adb shell "echo -e '\nPermitRootLogin yes\nStrictModes no\n' >> $SYSTEM_MOUNT/etc/ssh/sshd_config"
+
 # ------------------------------------------------------------------------------
 # 6. Post-Extraction Verification & Unmount
 # ------------------------------------------------------------------------------
